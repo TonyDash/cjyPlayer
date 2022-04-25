@@ -1,4 +1,4 @@
-package com.cjy.cjyplayer
+package com.cjy.cjyplayer.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,14 +16,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Example of a call to a native method
-        binding.sampleText.text = stringFromJNI()
+        binding.sampleText.text
     }
-
-    /**
-     * A native method that is implemented by the 'cjyplayer' native library,
-     * which is packaged with this application.
-     */
-    external fun stringFromJNI(): String
 
     companion object {
         // Used to load the 'cjyplayer' library on application startup.
