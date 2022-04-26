@@ -5,9 +5,12 @@
 #ifndef CJYPLAYER_PLAYERDATA_H
 #define CJYPLAYER_PLAYERDATA_H
 
+//struct是什么
+struct PlayerData {
 
-class PlayerData {
-
+    void drop();
+    unsigned char *data = 0;
+    int size = 0;
 };
 
 

@@ -13,6 +13,9 @@ public:
     virtual bool open(const char *url)=0;
     //读取一帧数据，数据有调用者自己清理
     virtual PlayerData Read()=0;
+
+    //总时长(单位：毫秒)
+    int totalMs = 0;
 };
 
 

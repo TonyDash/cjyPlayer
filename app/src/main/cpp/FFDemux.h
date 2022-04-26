@@ -6,6 +6,7 @@
 #define CJYPLAYER_FFDEMUX_H
 
 #include "IDemux.h"
+struct AVFormatContext;
 
 class FFDemux: public IDemux {
 public:
@@ -13,6 +14,11 @@ public:
     virtual bool open(const char *url);
     //读取一帧数据，数据有调用者自己清理
     virtual PlayerData Read();
+
+    FFDemux();//空的构造函数，ic才会初始化，如果不是空参构造函数，ic不会初始化。
+
+private:
+    AVFormatContext *ic = 0;
 };
 
 
