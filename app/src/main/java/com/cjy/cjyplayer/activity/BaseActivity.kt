@@ -47,7 +47,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * 动态请求权限
      * listener：回调函数，根据权限请求结果，执行对应的回调方法
      */
-    private fun checkPermission(listener: RequestPermissionListener) {
+    protected fun checkPermission(listener: RequestPermissionListener) {
         PermissionX.init(this)
             .permissions(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
