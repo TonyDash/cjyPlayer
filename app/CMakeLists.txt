@@ -78,7 +78,12 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        src/main/cpp/native-lib.cpp)
+        src/main/cpp/native-lib.cpp
+        src/main/cpp/FFDemux.cpp
+        src/main/cpp/IDemux.cpp
+        src/main/cpp/PlayerData.cpp
+        src/main/cpp/PlayerLog.cpp
+        )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -103,11 +108,16 @@ target_link_libraries( # Specifies the target library.
         #连接 FFmpeg 相关的库
         avutil
         swresample
-        android
         avcodec
         avfilter
         swscale
         avformat
+        #android库
+        android
+        #OpenGl相关的库
+        OpenSLES
+        #音频相关的库
+        GLESv2 EGL
         # Links the target library to the log library
         # included in the NDK.
         ${log-lib})
