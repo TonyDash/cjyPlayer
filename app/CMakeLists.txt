@@ -83,6 +83,7 @@ add_library( # Sets the name of the library.
         src/main/cpp/IDemux.cpp
         src/main/cpp/PlayerData.cpp
         src/main/cpp/PlayerLog.cpp
+        src/main/cpp/PlayerThread.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

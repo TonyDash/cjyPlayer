@@ -16,6 +16,7 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
     for(;;){
         PlayerData data = de->Read();
         LOGD("Read data size is %d",data.size);
+        if (data.size==0)break;
     }
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
