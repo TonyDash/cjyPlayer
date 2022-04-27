@@ -6,9 +6,10 @@
 #define CJYPLAYER_IDEMUX_H
 #include "PlayerData.h"
 #include "PlayerThread.h"
+#include "IObserver.h"
 
 //解封装接口
-class IDemux : public PlayerThread {
+class IDemux : public IObserver {
 public:
     //打开文件，或者流媒体、rtmp、rtsp、http
     virtual bool open(const char *url)=0;

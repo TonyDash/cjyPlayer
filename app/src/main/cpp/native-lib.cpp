@@ -8,10 +8,20 @@ extern "C"
 {
 
 }
+
+class TestObserver: public IObserver{
+public:
+    void update(PlayerData data) override{
+        LOGD("TestObserver update data size %d",data.size);
+    }
+};
+
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject thiz) {
+    TestObserver *testObserver =new TestObserver();
     IDemux *de = new FFDemux();
+    de->addObs(testObserver);
     de->open("/sdcard/Download/v1080.mp4");
 //    for(;;){
 //        PlayerData data = de->Read();
