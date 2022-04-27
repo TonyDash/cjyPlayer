@@ -46,12 +46,12 @@ PlayerData FFDemux::Read() {
 
     if (!ic)return {};
     PlayerData data;
-    //av_packet_alloc不了解
+    //av_packet_alloc:创建并且初始化
     AVPacket *packet = av_packet_alloc();
     //读取帧数据
     int re = av_read_frame(ic,packet);
     if (re!=0){
-        av_packet_free(&packet);//释放空间？
+        av_packet_free(&packet);//清空对象并且减少引用计数
         return {};
     }
     LOGI("packet size is %d pts is %lld",packet->size,packet->pts);
