@@ -3,6 +3,7 @@
 //
 
 #include "PlayerThread.h"
+#include "PlayerLog.h"
 #include <thread>
 
 //namespace不要放在头文件中，避免其他文件引用时，产生冲突
@@ -26,5 +27,7 @@ void PlayerThread::stopThread() {
  * 因为main函数会被子类重写，所以不适合在内部处理
  */
 void PlayerThread::threadMain() {
+    LOGI("threadMain start");
     main();
+    LOGI("threadMain end");
 }

@@ -5,9 +5,10 @@
 #ifndef CJYPLAYER_IDEMUX_H
 #define CJYPLAYER_IDEMUX_H
 #include "PlayerData.h"
+#include "PlayerThread.h"
 
 //解封装接口
-class IDemux {
+class IDemux : public PlayerThread {
 public:
     //打开文件，或者流媒体、rtmp、rtsp、http
     virtual bool open(const char *url)=0;
@@ -16,6 +17,8 @@ public:
 
     //总时长(单位：毫秒)
     int totalMs = 0;
+protected:
+    virtual void main();
 };
 
 
