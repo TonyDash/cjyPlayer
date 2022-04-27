@@ -6,9 +6,10 @@
 #include "PlayerLog.h"
 
 void IDemux::main() {
-    for(;;){
+    while (!isExit) {
         PlayerData data = Read();
-        LOGD("Read data size is %d",data.size);
-        if (data.size<=0)break;
+//        LOGD("Read data size is %d", data.size);
+        //if (data.size <= 0)break;
     }
+    LOGD("exit main");
 }

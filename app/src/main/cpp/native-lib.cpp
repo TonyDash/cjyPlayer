@@ -19,6 +19,8 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
 //        if (data.size==0)break;
 //    }
     de->startThread();
+    playerSleep(3000);//睡眠3秒
+    de->stopThread();
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
 }

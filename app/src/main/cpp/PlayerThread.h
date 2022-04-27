@@ -5,6 +5,7 @@
 #ifndef CJYPLAYER_PLAYERTHREAD_H
 #define CJYPLAYER_PLAYERTHREAD_H
 
+void playerSleep(int mis);
 
 class PlayerThread {
 public:
@@ -19,6 +20,9 @@ public:
     virtual void main(){
 
     };
+protected:
+    bool isExit = false;
+    bool isRunning = false;
 private:
     virtual void threadMain();
 };

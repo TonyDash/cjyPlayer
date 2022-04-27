@@ -34,7 +34,7 @@ bool FFDemux::open(const char *url) {
         return false;
     }
     //AV_TIME_BASE:时间基数单位，代表的是1秒里的单位个数
-    //这里我想打印毫秒值，所以用AV_TIME_BASE除以1000
+    //这里我想打印毫秒值，所以用AV_TIME_BASE除以1000，AV_TIME_BASE默认是纳秒值
     //得到的就是毫秒值
     this->totalMs = ic->duration/(AV_TIME_BASE/1000);
     LOGI("total ms = %d ",totalMs);
@@ -54,7 +54,7 @@ PlayerData FFDemux::Read() {
         av_packet_free(&packet);//清空对象并且减少引用计数
         return {};
     }
-    LOGI("packet size is %d pts is %lld",packet->size,packet->pts);
+//    LOGI("packet size is %d pts is %lld",packet->size,packet->pts);
     data.data = (unsigned char*)packet;
     data.size = packet->size;
     return data;
