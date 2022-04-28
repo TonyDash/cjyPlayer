@@ -41,6 +41,22 @@ bool FFDemux::open(const char *url) {
     return true;
 }
 
+PlayerParameter FFDemux::getVPara() {
+    if (!ic){
+        LOGD("ic is NULL !");
+        return {};
+    }
+    //获取视频流索引
+    int re = av_find_best_stream(ic,AVMEDIA_TYPE_VIDEO,-1,-1,0,0);
+    if (re<0){
+        LOGD("av_find_best_stream failed!");
+        return {};
+    }
+    PlayerParameter parameter;
+    parameter.para = ic->streams[re]->codecpar;
+    return parameter;
+}
+
 //读取一帧数据，数据有调用者自己清理
 PlayerData FFDemux::Read() {
 

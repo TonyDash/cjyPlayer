@@ -3,6 +3,8 @@
 #include "IDemux.h"
 #include "FFDemux.h"
 #include "PlayerLog.h"
+#include "IDecode.h"
+#include "FFDecode.h"
 
 extern "C"
 {
@@ -12,7 +14,7 @@ extern "C"
 class TestObserver: public IObserver{
 public:
     void update(PlayerData data) override{
-        LOGD("TestObserver update data size %d",data.size);
+//        LOGD("TestObserver update data size %d",data.size);
     }
 };
 
@@ -21,6 +23,8 @@ JNIEXPORT jstring JNICALL
 Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject thiz) {
     TestObserver *testObserver =new TestObserver();
     IDemux *de = new FFDemux();
+    IDecode *vdecode = new FFDecode();
+    vdecode->open(de->getVPara());
     de->addObs(testObserver);
     de->open("/sdcard/Download/v1080.mp4");
 //    for(;;){

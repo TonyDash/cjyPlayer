@@ -12,6 +12,9 @@ class FFDemux: public IDemux {
 public:
     //打开文件，或者流媒体、rtmp、rtsp、http
     virtual bool open(const char *url);
+
+    virtual PlayerParameter getVPara();
+
     //读取一帧数据，数据有调用者自己清理
     virtual PlayerData Read();
 
