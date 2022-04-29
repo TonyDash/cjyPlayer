@@ -17,6 +17,9 @@ public:
 
     virtual PlayerParameter getVPara()=0;
 
+    //获取音频数据
+    virtual PlayerParameter getAPara()=0;
+
     //读取一帧数据，数据有调用者自己清理
     virtual PlayerData Read()=0;
 

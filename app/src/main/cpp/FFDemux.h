@@ -15,6 +15,8 @@ public:
 
     virtual PlayerParameter getVPara();
 
+    virtual PlayerParameter getAPara();
+
     //读取一帧数据，数据有调用者自己清理
     virtual PlayerData Read();
 
@@ -22,6 +24,8 @@ public:
 
 private:
     AVFormatContext *ic = 0;
+    int audioStream = 1;
+    int videoStream = 0;
 };
 
 
