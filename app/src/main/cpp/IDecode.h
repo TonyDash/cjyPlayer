@@ -7,6 +7,7 @@
 
 #include "PlayerParameter.h"
 #include "IObserver.h"
+#include <list>
 
 //解码接口：支持硬解码
 class IDecode : public IObserver{
@@ -19,6 +20,15 @@ public:
 
     //从线程中获取解码结果
     virtual PlayerData recvFrame() = 0;
+
+    //由主体notify通知的数据
+    virtual void update(PlayerData data);
+
+    bool isAudio = false;
+protected:
+    virtual void main();
+    //缓冲队列
+    std::list<PlayerData> packets;
 };
 
 

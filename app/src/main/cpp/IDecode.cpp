@@ -3,3 +3,12 @@
 //
 
 #include "IDecode.h"
+void IDecode::main() {
+
+}
+
+void IDecode::update(PlayerData data) {
+    if (data.isAudio != isAudio){
+        return;
+    }
+}

@@ -35,6 +35,14 @@ bool FFDecode::open(PlayerParameter parameter) {
         LOGE("%s", buf);
         return false;
     }
+    if (codec->codec_type == AVMEDIA_TYPE_VIDEO){
+        isAudio = false;
+    }else{
+        //这里偷懒了，如果需要解码字幕，就会有问题
+        //因为字幕不是视频流也不是音频流
+        //严谨的话，需要再判断
+        isAudio = true;
+    }
     return true;
 }
 
