@@ -35,9 +35,9 @@ bool FFDecode::open(PlayerParameter parameter) {
         LOGE("%s", buf);
         return false;
     }
-    if (codec->codec_type == AVMEDIA_TYPE_VIDEO){
+    if (codec->codec_type == AVMEDIA_TYPE_VIDEO) {
         isAudio = false;
-    }else{
+    } else {
         //这里偷懒了，如果需要解码字幕，就会有问题
         //因为字幕不是视频流也不是音频流
         //严谨的话，需要再判断
@@ -77,6 +77,10 @@ PlayerData FFDecode::recvFrame() {
         //linesize:如果是平面模式，会有YUV三种路，每一路一行的大小
         //height：高度
         data.size = (frame->linesize[0] + frame->linesize[1] + frame->linesize[2]) * frame->height;
+    } else {
+        //样本字节数 * 单通道样本数 * 通道数
+        data.size = av_get_bytes_per_sample(static_cast<AVSampleFormat>(frame->format)) *
+                    frame->nb_samples * 2;
     }
     return data;
 }

@@ -15,11 +15,11 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject thiz) {
     IDemux *de = new FFDemux();
+    de->open("/sdcard/Download/v1080.mp4");
     IDecode *vdecode = new FFDecode();
     IDecode *adecode = new FFDecode();
     vdecode->open(de->getVPara());
     adecode->open(de->getAPara());
-    de->open("/sdcard/Download/v1080.mp4");
     de->addObs(vdecode);
     de->addObs(adecode);
 
