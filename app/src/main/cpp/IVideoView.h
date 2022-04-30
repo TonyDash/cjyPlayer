@@ -6,8 +6,13 @@
 #define CJYPLAYER_IVIDEOVIEW_H
 
 
-class IVideoView {
+#include "PlayerData.h"
 
+class IVideoView {
+public:
+    virtual void setRender(void *win) =0;
+    virtual void Render(PlayerData data)=0;
+    virtual void update(PlayerData data);
 };
 
 

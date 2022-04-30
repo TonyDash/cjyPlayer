@@ -6,8 +6,18 @@
 #define CJYPLAYER_GLVIDEOVIEW_H
 
 
+#include "PlayerData.h"
+class PlayerTexture;
+
 class GLVideoView {
 
+public:
+    virtual void setRender(void *win);
+    virtual void Render(PlayerData data);
+
+protected:
+    void *view = 0;
+    PlayerTexture *txt = 0;
 };
 
 

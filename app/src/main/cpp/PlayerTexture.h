@@ -7,7 +7,9 @@
 
 
 class PlayerTexture {
-
+public:
+    static PlayerTexture *create();
+    virtual bool init(void *win)=0;
 };
 
 

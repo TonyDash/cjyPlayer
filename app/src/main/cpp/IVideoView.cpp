@@ -3,3 +3,7 @@
 //
 
 #include "IVideoView.h"
+
+void IVideoView::update(PlayerData data) {
+    this->Render(data);
+}
