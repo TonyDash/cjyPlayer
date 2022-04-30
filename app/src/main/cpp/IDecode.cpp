@@ -29,7 +29,7 @@ void IDecode::main() {
                 if (!frame.data){
                     break;
                 }
-                LOGD("recvFrame %d",frame.size);
+//                LOGD("recvFrame %d",frame.size);
                 //发送数据到所有观察者
                 this->notify(packs);
             }

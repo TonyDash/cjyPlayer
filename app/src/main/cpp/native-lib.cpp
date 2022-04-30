@@ -5,6 +5,7 @@
 #include "PlayerLog.h"
 #include "IDecode.h"
 #include "FFDecode.h"
+#include "PlayerEGL.h"
 #include <android/native_window_jni.h>
 
 extern "C"
@@ -37,4 +38,5 @@ Java_com_cjy_cjyplayer_activity_CjyPlayer_initView(JNIEnv *env, jobject thiz,
     //创建窗口对象
     ANativeWindow *window = ANativeWindow_fromSurface(env,surface_view);
     //关联EGL
+    PlayerEGL::get()->initEGL(window);
 }

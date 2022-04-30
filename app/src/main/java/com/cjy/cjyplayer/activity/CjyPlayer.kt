@@ -18,6 +18,7 @@ class CjyPlayer : GLSurfaceView, SurfaceHolder.Callback {
 
     override fun surfaceCreated(holder: SurfaceHolder) {
          //初始化OpenGL EGL 显示
+        initView(holder.surface)
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {
