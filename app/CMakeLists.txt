@@ -88,6 +88,11 @@ add_library( # Sets the name of the library.
         src/main/cpp/IDecode.cpp
         src/main/cpp/FFDecode.cpp
         src/main/cpp/PlayerParameter.cpp
+        src/main/cpp/GLVideoView.cpp
+        src/main/cpp/IVideoView.cpp
+        src/main/cpp/PlayerTexture.cpp
+        src/main/cpp/PlayerEGL.cpp
+        src/main/cpp/PlayerShader.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a
