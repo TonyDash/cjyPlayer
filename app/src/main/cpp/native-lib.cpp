@@ -6,6 +6,7 @@
 #include "IDecode.h"
 #include "FFDecode.h"
 #include "PlayerEGL.h"
+#include "PlayerShader.h"
 #include <android/native_window_jni.h>
 
 extern "C"
@@ -39,4 +40,6 @@ Java_com_cjy_cjyplayer_activity_CjyPlayer_initView(JNIEnv *env, jobject thiz,
     ANativeWindow *window = ANativeWindow_fromSurface(env,surface_view);
     //关联EGL
     PlayerEGL::get()->initEGL(window);
+    PlayerShader shader;//shader不做单例，因为shader会有多个，有需求会有多路视频
+    shader.init();
 }
