@@ -77,10 +77,14 @@ PlayerData FFDecode::recvFrame() {
         //linesize:如果是平面模式，会有YUV三种路，每一路一行的大小
         //height：高度
         data.size = (frame->linesize[0] + frame->linesize[1] + frame->linesize[2]) * frame->height;
+        data.width = frame->width;
+        data.height = frame->height;
     } else {
         //样本字节数 * 单通道样本数 * 通道数
         data.size = av_get_bytes_per_sample(static_cast<AVSampleFormat>(frame->format)) *
                     frame->nb_samples * 2;
     }
+    //复制数据
+    memcpy(data.datas,frame->data,sizeof(data.datas));
     return data;
 }

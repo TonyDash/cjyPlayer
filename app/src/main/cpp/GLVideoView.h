@@ -7,9 +7,11 @@
 
 
 #include "PlayerData.h"
+#include "IVideoView.h"
+
 class PlayerTexture;
 
-class GLVideoView {
+class GLVideoView :public IVideoView{
 
 public:
     virtual void setRender(void *win);

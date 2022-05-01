@@ -10,6 +10,8 @@ class PlayerTexture {
 public:
     static PlayerTexture *create();
     virtual bool init(void *win)=0;
+
+    virtual void draw(unsigned char *data[],int width,int height)=0;
 };
 
 

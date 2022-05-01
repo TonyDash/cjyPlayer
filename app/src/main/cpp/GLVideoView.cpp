@@ -15,4 +15,5 @@ void GLVideoView::Render(PlayerData data) {
         txt = PlayerTexture::create();
         txt->init(view);
     }
+    txt->draw(data.datas,data.width,data.height);
 }

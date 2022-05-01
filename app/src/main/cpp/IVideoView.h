@@ -7,8 +7,9 @@
 
 
 #include "PlayerData.h"
+#include "IObserver.h"
 
-class IVideoView {
+class IVideoView: public IObserver {
 public:
     virtual void setRender(void *win) =0;
     virtual void Render(PlayerData data)=0;

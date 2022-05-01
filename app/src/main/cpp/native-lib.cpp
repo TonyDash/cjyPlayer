@@ -7,12 +7,16 @@
 #include "FFDecode.h"
 #include "PlayerEGL.h"
 #include "PlayerShader.h"
+#include "IVideoView.h"
+#include "GLVideoView.h"
 #include <android/native_window_jni.h>
 
 extern "C"
 {
 
 }
+
+IVideoView *view = NULL;
 
 extern "C"
 JNIEXPORT jstring JNICALL
@@ -26,6 +30,9 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
     de->addObs(vdecode);
     de->addObs(adecode);
 
+    view = new GLVideoView();-
+    vdecode->addObs(view);
+
     de->startThread();
     vdecode->startThread();
     adecode->startThread();
@@ -38,8 +45,10 @@ Java_com_cjy_cjyplayer_activity_CjyPlayer_initView(JNIEnv *env, jobject thiz,
                                                    jobject surface_view) {
     //创建窗口对象
     ANativeWindow *window = ANativeWindow_fromSurface(env,surface_view);
+    view->setRender(window);
+
     //关联EGL
-    PlayerEGL::get()->initEGL(window);
-    PlayerShader shader;//shader不做单例，因为shader会有多个，有需求会有多路视频
-    shader.init();
+//    PlayerEGL::get()->initEGL(window);
+//    PlayerShader shader;//shader不做单例，因为shader会有多个，有需求会有多路视频
+//    shader.init();
 }

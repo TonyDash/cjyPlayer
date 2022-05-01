@@ -13,6 +13,16 @@ public:
     EGLSurface  surface = EGL_NO_SURFACE;
     EGLContext context = EGL_NO_CONTEXT;
 
+    virtual void draw()
+    {
+        if(display == EGL_NO_DISPLAY || surface == EGL_NO_SURFACE)
+        {
+            return;
+        }
+        //交换surface到显示设备
+        eglSwapBuffers(display,surface);
+    }
+
     bool initEGL(void *win) override{
         ANativeWindow *nWin = static_cast<ANativeWindow *>(win);
         //初始化EGL
