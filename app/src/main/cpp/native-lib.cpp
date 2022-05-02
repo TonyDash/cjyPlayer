@@ -9,6 +9,7 @@
 #include "PlayerShader.h"
 #include "IVideoView.h"
 #include "GLVideoView.h"
+#include "FFResample.h"
 #include <android/native_window_jni.h>
 
 extern "C"
@@ -30,8 +31,13 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
     de->addObs(vdecode);
     de->addObs(adecode);
 
-    view = new GLVideoView();-
+    view = new GLVideoView();
     vdecode->addObs(view);
+
+    IResample *resample = new FFResample();
+    resample->open(de->getAPara());
+    adecode->addObs(resample);
+
 
     de->startThread();
     vdecode->startThread();

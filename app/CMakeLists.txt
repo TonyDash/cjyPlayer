@@ -93,6 +93,8 @@ add_library( # Sets the name of the library.
         src/main/cpp/PlayerTexture.cpp
         src/main/cpp/PlayerEGL.cpp
         src/main/cpp/PlayerShader.cpp
+        src/main/cpp/IResample.cpp
+        src/main/cpp/FFResample.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a
@@ -118,12 +120,12 @@ target_link_libraries( # Specifies the target library.
         #连接 FFmpeg 相关的库
         avutil
         swresample
+        #android库
+        android
         avcodec
         avfilter
         swscale
         avformat
-        #android库
-        android
         #OpenGl相关的库
         OpenSLES
         #音频相关的库
