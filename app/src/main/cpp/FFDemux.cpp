@@ -58,6 +58,8 @@ PlayerParameter FFDemux::getVPara() {
     videoStream = re;
     PlayerParameter parameter;
     parameter.para = ic->streams[re]->codecpar;
+    parameter.channels = ic->streams[re]->codecpar->channels;
+    parameter.sample_rate = ic->streams[0]->codecpar->sample_rate;
     return parameter;
 }
 

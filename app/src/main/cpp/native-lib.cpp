@@ -11,6 +11,8 @@
 #include "GLVideoView.h"
 #include "IResample.h"
 #include "FFResample.h"
+#include "IAudioPlay.h"
+#include "SLAudioPlay.h"
 #include <android/native_window_jni.h>
 
 extern "C"
@@ -36,8 +38,14 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
     vdecode->addObs(view);
 
     IResample *resample = new FFResample();
-    resample->open(de->getAPara());
+    PlayerParameter outParameter= de->getAPara();
+
+    resample->open(de->getAPara(),outParameter);
     adecode->addObs(resample);
+
+    IAudioPlay *audioPlay = new SLAudioPlay();
+    audioPlay->StartPlay(outParameter);
+    resample->addObs(audioPlay);
 
     de->startThread();
     vdecode->startThread();
