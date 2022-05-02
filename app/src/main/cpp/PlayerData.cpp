@@ -29,5 +29,6 @@ bool PlayerData::Alloc(int size,const char *d)
     {
         memcpy(this->data,d,size);//复制数据
     }
+    this->size = size;
     return true;
 }
