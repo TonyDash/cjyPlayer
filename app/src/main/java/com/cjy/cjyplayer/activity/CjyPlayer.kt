@@ -22,11 +22,9 @@ class CjyPlayer : GLSurfaceView, SurfaceHolder.Callback {
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {
-        super.surfaceChanged(holder, format, w, h)
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        super.surfaceDestroyed(holder)
     }
 
     external fun initView(surfaceView:Any);

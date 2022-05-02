@@ -9,6 +9,7 @@
 #include "PlayerShader.h"
 #include "IVideoView.h"
 #include "GLVideoView.h"
+#include "IResample.h"
 #include "FFResample.h"
 #include <android/native_window_jni.h>
 
@@ -23,7 +24,7 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject thiz) {
     IDemux *de = new FFDemux();
-    de->open("/sdcard/Download/v1080.mp4");
+    de->open("/sdcard/Download/1080.mp4");
     IDecode *vdecode = new FFDecode();
     IDecode *adecode = new FFDecode();
     vdecode->open(de->getVPara());
@@ -37,7 +38,6 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
     IResample *resample = new FFResample();
     resample->open(de->getAPara());
     adecode->addObs(resample);
-
 
     de->startThread();
     vdecode->startThread();

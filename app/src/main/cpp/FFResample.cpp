@@ -57,11 +57,6 @@ PlayerData FFResample::resample(PlayerData inData) {
                 frame->nb_samples,
                 (const uint8_t **)frame->data,
                 frame->nb_samples);
-//    int len = swr_convert(actx,
-//                          outArr,
-//                          frame->nb_samples,
-//                          (const uint8_t **)frame->data,
-//                          frame->nb_samples);
     if(len<=0)
     {
         out.drop();
