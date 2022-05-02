@@ -13,6 +13,17 @@ static SLObjectItf mix = NULL;
 static SLObjectItf player = NULL;
 static SLPlayItf iplayer = NULL;
 static SLAndroidSimpleBufferQueueItf pcmQue = NULL;
+
+SLAudioPlay::SLAudioPlay()
+{
+    buf = new unsigned char[1024*1024];
+}
+SLAudioPlay::~SLAudioPlay()
+{
+    delete buf;
+    buf = 0;
+}
+
 //static修饰，只在本cpp文件内有效
 static SLEngineItf CreateSL()
 {
@@ -33,6 +44,16 @@ void SLAudioPlay::PlayCall(void *bufq)
     if(!bufq)return;
     SLAndroidSimpleBufferQueueItf bf = (SLAndroidSimpleBufferQueueItf)bufq;
     LOGE("SLAudioPlay::PlayCall");
+    PlayerData d = getData();
+    if (d.size<=0){
+        LOGD("getData() size is 0");
+        return;
+    }
+    if(!buf)
+        return;
+    memcpy(buf,d.data,d.size);
+    (*bf)->Enqueue(bf,buf,d.size);
+    d.drop();//这里清理数据，避免访问是发生异常，所以需要复制数据
 }
 
 
