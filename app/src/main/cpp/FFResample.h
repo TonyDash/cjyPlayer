@@ -5,9 +5,9 @@
 #ifndef CJYPLAYER_FFRESAMPLE_H
 #define CJYPLAYER_FFRESAMPLE_H
 
-
-#include <libswresample/swresample.h>
 #include "IResample.h"
+
+struct SwrContext;
 
 class FFResample : public IResample {
 public:
