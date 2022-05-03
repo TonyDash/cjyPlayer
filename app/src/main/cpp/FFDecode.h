@@ -13,8 +13,9 @@ struct AVFrame;
 
 class FFDecode : public IDecode{
 public:
+    static void initHard(void *vm);
     //打开解码器
-    virtual bool open(PlayerParameter parameter);
+    virtual bool open(PlayerParameter parameter,bool isHard = false);
 
     bool sendPacket(PlayerData data) override;
 

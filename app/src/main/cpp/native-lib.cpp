@@ -20,6 +20,12 @@ extern "C"
 
 }
 
+extern "C"
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved){
+    FFDecode::initHard(vm);
+    return JNI_VERSION_1_4;
+}
+
 IVideoView *view = NULL;
 
 extern "C"
@@ -29,7 +35,7 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
     de->open("/sdcard/Download/1080.mp4");
     IDecode *vdecode = new FFDecode();
     IDecode *adecode = new FFDecode();
-    vdecode->open(de->getVPara());
+    vdecode->open(de->getVPara(), true);
     adecode->open(de->getAPara());
     de->addObs(vdecode);
     de->addObs(adecode);
@@ -40,8 +46,9 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
     IResample *resample = new FFResample();
     PlayerParameter outParameter= de->getAPara();
 
-    resample->open(de->getAPara(),outParameter);
-    adecode->addObs(resample);
+    //这里增加音频采样会崩溃，暂时注释
+//    resample->open(de->getAPara(),outParameter);
+//    adecode->addObs(resample);
 
     IAudioPlay *audioPlay = new SLAudioPlay();
     audioPlay->StartPlay(outParameter);

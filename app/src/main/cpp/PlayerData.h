@@ -30,6 +30,8 @@ struct PlayerData {
     bool isAudio = false;
     int width = 0;
     int height = 0;
+    //影片格式，决定是否使用硬解码
+    int format = 0;
 };
 
 

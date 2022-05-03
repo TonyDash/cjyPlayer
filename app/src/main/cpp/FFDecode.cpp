@@ -8,19 +8,27 @@
 extern "C"
 {
 #include <libavcodec/avcodec.h>
+#include <libavcodec/jni.h>
 }
 
-bool FFDecode::open(PlayerParameter parameter) {
+void FFDecode::initHard(void *vm) {
+    av_jni_set_java_vm(vm,0);
+}
+
+bool FFDecode::open(PlayerParameter parameter,bool isHard) {
 
     if (!parameter.para) return false;
     AVCodecParameters *p = parameter.para;
     //查找解码器
     const AVCodec *cd = avcodec_find_decoder(p->codec_id);
+    if (isHard){//硬解码
+        cd = avcodec_find_decoder_by_name("h264_mediacodec");
+    }
     if (!cd) {
-        LOGD("avcodec_find_decoder %d failed!", p->codec_id);
+        LOGD("avcodec_find_decoder %d failed!  isHard=%d", p->codec_id,isHard);
         return false;
     }
-
+    LOGD("avcodec_find_decoder_by_name success %d",isHard);
     //创建解码上下文，并复制参数
     codec = avcodec_alloc_context3(cd);
     avcodec_parameters_to_context(codec, p);//复制参数
@@ -84,6 +92,9 @@ PlayerData FFDecode::recvFrame() {
         data.size = av_get_bytes_per_sample(static_cast<AVSampleFormat>(frame->format)) *
                     frame->nb_samples * 2;
     }
+//    if (!isAudio)
+//    LOGD("data format is %d",frame->format);
+    data.format = frame->format;
     //复制数据
     memcpy(data.datas,frame->data,sizeof(data.datas));
     return data;
