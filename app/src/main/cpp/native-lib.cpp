@@ -19,18 +19,12 @@ extern "C"
 {
 
 }
+IVideoView *view = NULL;
 
 extern "C"
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved){
     FFDecode::initHard(vm);
-    return JNI_VERSION_1_4;
-}
 
-IVideoView *view = NULL;
-
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject thiz) {
     IDemux *de = new FFDemux();
     de->open("/sdcard/Download/1080.mp4");
     IDecode *vdecode = new FFDecode();
@@ -57,6 +51,14 @@ Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject 
     de->startThread();
     vdecode->startThread();
     adecode->startThread();
+
+    return JNI_VERSION_1_4;
+}
+
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_cjy_cjyplayer_activity_MainActivity_stringFromJNI(JNIEnv *env, jobject thiz) {
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
 }
