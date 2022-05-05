@@ -18,7 +18,7 @@ void playerSleep(int mis){
     this_thread::sleep_for(du);
 }
 
-void PlayerThread::startThread() {
+bool PlayerThread::startThread() {
     isExit = false;
     //函数的名称地址：&PlayerThread::threadMain
     //this:当前指针
@@ -26,6 +26,7 @@ void PlayerThread::startThread() {
     //放弃对该线程的控制
     //若不增加这句代码，当对象被清空时，相关的资源会出错
     playerThread.detach();
+    return true;
 }
 
 void PlayerThread::stopThread() {

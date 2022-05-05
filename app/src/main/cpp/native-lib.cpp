@@ -13,6 +13,7 @@
 #include "FFResample.h"
 #include "IAudioPlay.h"
 #include "SLAudioPlay.h"
+#include "IPlayer.h"
 #include <android/native_window_jni.h>
 
 extern "C"
@@ -26,11 +27,11 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved){
     FFDecode::initHard(vm);
 
     IDemux *de = new FFDemux();
-    de->open("/sdcard/Download/1080.mp4");
+//    de->open("/sdcard/Download/1080.mp4");
     IDecode *vdecode = new FFDecode();
     IDecode *adecode = new FFDecode();
-    vdecode->open(de->getVPara(), true);
-    adecode->open(de->getAPara());
+//    vdecode->open(de->getVPara(), true);
+//    adecode->open(de->getAPara());
     de->addObs(vdecode);
     de->addObs(adecode);
 
@@ -38,19 +39,26 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved){
     vdecode->addObs(view);
 
     IResample *resample = new FFResample();
-    PlayerParameter outParameter= de->getAPara();
+//    PlayerParameter outParameter= de->getAPara();
 
     //这里增加音频采样会崩溃，暂时注释
 //    resample->open(de->getAPara(),outParameter);
-//    adecode->addObs(resample);
+    adecode->addObs(resample);
 
     IAudioPlay *audioPlay = new SLAudioPlay();
-    audioPlay->StartPlay(outParameter);
+//    audioPlay->StartPlay(outParameter);
     resample->addObs(audioPlay);
+    IPlayer::get()->demux = de;
+    IPlayer::get()->aDecode = adecode;
+    IPlayer::get()->vDecode = vdecode;
+    IPlayer::get()->videoView = view;
+    IPlayer::get()->audioPlay = audioPlay;
 
-    de->startThread();
-    vdecode->startThread();
-    adecode->startThread();
+    IPlayer::get()->open("/sdcard/Download/1080.mp4");
+
+//    de->startThread();
+//    vdecode->startThread();
+//    adecode->startThread();
 
     return JNI_VERSION_1_4;
 }

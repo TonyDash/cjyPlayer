@@ -10,7 +10,7 @@ void playerSleep(int mis);
 class PlayerThread {
 public:
     //启动线程
-    virtual void startThread();
+    virtual bool startThread();
     //停止线程,安全停止
     //由于线程状态不确定，停止线程是个比较危险的操作
     //但是由于性能和消耗问题，结束进程或者不需要继续执行时，又必须停止线程
