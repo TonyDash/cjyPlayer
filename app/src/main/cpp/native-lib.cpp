@@ -23,7 +23,7 @@ extern "C"
 IVideoView *view = NULL;
 
 extern "C"
-JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved){
+JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     FFDecode::initHard(vm);
 
     IDemux *de = new FFDemux();
@@ -56,6 +56,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved){
 
     IPlayer::get()->open("/sdcard/Download/1080.mp4");
 
+    IPlayer::get()->startThread();
 //    de->startThread();
 //    vdecode->startThread();
 //    adecode->startThread();
@@ -75,9 +76,9 @@ JNIEXPORT void JNICALL
 Java_com_cjy_cjyplayer_activity_CjyPlayer_initView(JNIEnv *env, jobject thiz,
                                                    jobject surface_view) {
     //创建窗口对象
-    ANativeWindow *window = ANativeWindow_fromSurface(env,surface_view);
-    view->setRender(window);
-
+    ANativeWindow *window = ANativeWindow_fromSurface(env, surface_view);
+//    view->setRender(window);
+    IPlayer::get()->initView(window);
     //关联EGL
 //    PlayerEGL::get()->initEGL(window);
 //    PlayerShader shader;//shader不做单例，因为shader会有多个，有需求会有多路视频

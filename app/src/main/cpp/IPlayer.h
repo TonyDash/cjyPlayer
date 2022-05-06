@@ -6,6 +6,7 @@
 #define CJYPLAYER_IPLAYER_H
 
 #include "PlayerThread.h"
+#include "PlayerParameter.h"
 
 //这里不直接include，是为了不需要提供所有的头文件给用户
 //利用class声明，就只需要提供一个IPlayer的头文件
@@ -23,6 +24,9 @@ public:
     virtual bool open(const char *path);
 
     virtual bool startThread();
+
+    virtual void initView(void *win);
+
     //视频是否硬解码
     bool isHardDecode = true;
 
@@ -32,6 +36,8 @@ public:
     IResample *resample = 0;
     IVideoView *videoView = 0;
     IAudioPlay *audioPlay = 0;
+    //音频输出参数配置
+    PlayerParameter outPara;
 protected:
     IPlayer(){};
 };
