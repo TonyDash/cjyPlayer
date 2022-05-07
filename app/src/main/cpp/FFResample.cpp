@@ -62,6 +62,7 @@ PlayerData FFResample::resample(PlayerData inData) {
         out.drop();
         return {};
     }
+    out.pts = inData.pts;
     LOGE("swr_convert success = %d",len);
     return out;
 }

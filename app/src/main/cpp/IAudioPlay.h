@@ -19,6 +19,7 @@ public:
     virtual bool StartPlay(PlayerParameter out) = 0;
     //最大缓冲 100帧 25秒一帧计算，就是缓冲能4秒
     int maxFrame = 100;
+    int pts = 0;
 protected:
     std::list<PlayerData> frames;
     std::mutex framesMutex;

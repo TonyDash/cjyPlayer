@@ -18,8 +18,10 @@ IPlayer *IPlayer::get(unsigned char index) {
 }
 
 bool IPlayer::open(const char *path) {
+    mutex.lock();
     //解封装
     if (!demux || !demux->open(path)) {
+        mutex.unlock();
         LOGE("demux->Open %s failed!", path);
         return false;
     }
@@ -41,11 +43,14 @@ bool IPlayer::open(const char *path) {
     if (!resample || !resample->open(demux->getAPara(), outPara)) {
         LOGE("resample->Open %s failed!", path);
     }
+    mutex.unlock();
     return true;
 }
 
 bool IPlayer::startThread() {
+    mutex.lock();
     if (!demux || !demux->startThread()) {
+        mutex.unlock();
         LOGE("demux startThread failed");
         return false;
     }
@@ -53,13 +58,35 @@ bool IPlayer::startThread() {
     if (aDecode)aDecode->startThread();
     if (audioPlay)audioPlay->StartPlay(demux->getAPara());
     if (vDecode)vDecode->startThread();
-
-
+    PlayerThread::startThread();
+    mutex.unlock();
     return true;
 }
 
 void IPlayer::initView(void *win) {
-    if (videoView){
+    if (videoView) {
         videoView->setRender(win);
     }
+}
+
+void IPlayer::main() {
+    while (!isExit) {
+        mutex.lock();
+        //内存被清理时，audioPlay和vDecode指针不一定存在
+        //所以需要判断，避免崩溃
+        if (!audioPlay ||!vDecode){
+            mutex.unlock();
+            playerSleep(2);
+            continue;
+        }
+        //同步
+        //获取音频的pts，通知视频
+        //时间基数不统一
+        int aPts = audioPlay->pts;
+        LOGD("apts = %d",aPts);
+        vDecode->synPts = aPts;
+        mutex.unlock();
+        playerSleep(2);
+    }
+
 }

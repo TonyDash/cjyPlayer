@@ -30,6 +30,12 @@ public:
     //队列的最大值
     //100帧画面：如果一秒是25帧，那缓存最大值就是缓存4秒
     int maxListSize = 100;
+
+
+    //同步时间，再次打开文件要清理
+    int synPts = 0;
+    int pts = 0;
+
 protected:
     virtual void main();
     //缓冲队列

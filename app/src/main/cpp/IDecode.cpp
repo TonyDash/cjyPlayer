@@ -8,6 +8,18 @@
 void IDecode::main() {
     while (!isExit){
         packetMutex.lock();
+        //判断音视频同步
+        //不是音频，同时音频同步基数大于0
+        if (!isAudio&&synPts>0){
+            //音频时间小于视频时间
+            //音频播放慢于视频
+            if (synPts<pts){
+                packetMutex.unlock();
+                playerSleep(1);
+                continue;
+            }
+        }
+
         if (packets.empty()){
             packetMutex.unlock();
             //加sleep，为了避免当队列为空时，循环把CPU耗尽。
@@ -29,6 +41,7 @@ void IDecode::main() {
                 if (!frame.data){
                     break;
                 }
+                pts = frame.pts;
 //                LOGD("recvFrame %d",frame.size);
                 //发送数据到所有观察者
                 this->notify(packs);

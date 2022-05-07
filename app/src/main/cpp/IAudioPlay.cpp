@@ -10,16 +10,17 @@ PlayerData IAudioPlay::getData() {
     while (!isExit){
         framesMutex.lock();
         if (!frames.empty()){
+            //有数据返回
             data = frames.front();
             frames.pop_front();
             framesMutex.unlock();
+            pts = data.pts;
             return data;
         }
         framesMutex.unlock();
         playerSleep(1);
     }
-
-
+    //未获取数据
     return data;
 }
 

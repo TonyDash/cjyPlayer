@@ -16,6 +16,7 @@ class IDecode;
 class IResample;
 class IVideoView;
 class IAudioPlay;
+#include <mutex>
 
 class IPlayer : public PlayerThread {
 public:
@@ -39,6 +40,9 @@ public:
     //音频输出参数配置
     PlayerParameter outPara;
 protected:
+    std::mutex mutex;
+    //用作音视频同步
+    void main();
     IPlayer(){};
 };
 

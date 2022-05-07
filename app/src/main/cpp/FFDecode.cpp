@@ -97,5 +97,6 @@ PlayerData FFDecode::recvFrame() {
     data.format = frame->format;
     //复制数据
     memcpy(data.datas,frame->data,sizeof(data.datas));
+    data.pts = frame->pts;
     return data;
 }

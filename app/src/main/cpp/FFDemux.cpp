@@ -10,6 +10,11 @@ extern "C"
 #include <libavformat/avformat.h>
 }
 
+//分数转为浮点数
+static double r2d(AVRational r) {
+    return r.num == 0 || r.den == 0 ? 0. : (double) r.num / (double) r.den;
+}
+
 //打开文件，或者流媒体、rtmp、rtsp、http
 bool FFDemux::open(const char *url) {
     LOGD("open file %s begin", url);
@@ -108,6 +113,11 @@ PlayerData FFDemux::Read() {
         av_packet_free(&packet);
         return {};
     }
+    //转换pts
+    packet->pts = packet->pts * (1000 * r2d(ic->streams[packet->stream_index]->time_base));
+    packet->dts = packet->dts * (1000 * r2d(ic->streams[packet->stream_index]->time_base));
+    data.pts = (int)packet->pts;
+    LOGD("demux pts %d",data.pts);
     return data;
 }
 
