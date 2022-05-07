@@ -6,12 +6,15 @@
 #define CJYPLAYER_FFDEMUX_H
 
 #include "IDemux.h"
+#include <mutex>
 struct AVFormatContext;
 
 class FFDemux: public IDemux {
 public:
     //打开文件，或者流媒体、rtmp、rtsp、http
     virtual bool open(const char *url);
+
+    virtual void close();
 
     virtual PlayerParameter getVPara();
 
@@ -26,6 +29,7 @@ private:
     AVFormatContext *ic = 0;
     int audioStream = 1;
     int videoStream = 0;
+    std::mutex mutex;
 };
 
 
