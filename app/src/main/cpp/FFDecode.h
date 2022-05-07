@@ -17,6 +17,8 @@ public:
     //打开解码器
     virtual bool open(PlayerParameter parameter,bool isHard = false);
 
+    virtual void close();
+
     bool sendPacket(PlayerData data) override;
 
     PlayerData recvFrame() override;
@@ -24,6 +26,7 @@ public:
 protected:
     AVCodecContext *codec = 0;
     AVFrame *frame = 0;
+    std::mutex mutex;
 };
 
 

@@ -14,11 +14,13 @@ public:
     virtual bool
     open(PlayerParameter inParameter, PlayerParameter outParameter = PlayerParameter());
 
+    virtual void close();
     //重新采样
     virtual PlayerData resample(PlayerData inData);
 
 protected:
     SwrContext *actx = 0;
+    std::mutex mutex;
 };
 
 

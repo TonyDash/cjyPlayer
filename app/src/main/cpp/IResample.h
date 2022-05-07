@@ -13,6 +13,7 @@ class IResample :public IObserver {
 public:
     virtual bool open(PlayerParameter inParameter, PlayerParameter outParameter=PlayerParameter()) = 0;
     virtual PlayerData resample(PlayerData inData) = 0;
+    virtual void close()=0;
     virtual void update(PlayerData data);
     int outChannels = 2;
     int outFormat = 1;
