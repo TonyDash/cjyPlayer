@@ -24,6 +24,14 @@ public:
     virtual bool init(void *win,PlayerTextureType type=PLAYER_TEXTURE_YUV_420P)=0;
 
     virtual void draw(unsigned char *data[],int width,int height)=0;
+    virtual void drop()=0;
+    //析构函数一定要virtual
+    //因为析构函数后面需要添加自己的内容
+    //
+    virtual ~PlayerTexture(){};
+
+protected:
+    PlayerTexture(){};
 };
 
 

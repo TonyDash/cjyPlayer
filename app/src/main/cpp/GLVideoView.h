@@ -16,10 +16,12 @@ class GLVideoView :public IVideoView{
 public:
     virtual void setRender(void *win);
     virtual void Render(PlayerData data);
+    virtual void close();
 
 protected:
     void *view = 0;
     PlayerTexture *txt = 0;
+    std::mutex mutex;
 };
 
 

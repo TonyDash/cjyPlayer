@@ -14,6 +14,7 @@ public:
     virtual void setRender(void *win) =0;
     virtual void Render(PlayerData data)=0;
     virtual void update(PlayerData data);
+    virtual void close()=0;
 };
 
 
