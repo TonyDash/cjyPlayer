@@ -77,6 +77,26 @@ static const char *fragNV21 = GET_STR(
         }
 );
 
+void PlayerShader::close() {
+    mutex.lock();
+    //释放shader
+    if (program)
+        glDeleteProgram(program);
+    if (fsh)
+        glDeleteShader(fsh);
+    if (vsh)
+        glDeleteShader(vsh);
+    //释放材质
+    //sizeof(texts)为字节大小，除以sizeof(unsigned int)，得到个数
+    for (int i = 0; i < sizeof(texts) / sizeof(unsigned int); ++i) {
+        if (texts[i]) {
+            glDeleteTextures(1, &texts[i]);
+        }
+        texts[i] = 0;
+    }
+    mutex.unlock();
+}
+
 static GLuint initShader(const char *code, GLint type) {
     //创建shader
     GLuint sh = glCreateShader(type);
@@ -103,10 +123,13 @@ static GLuint initShader(const char *code, GLint type) {
 }
 
 bool PlayerShader::init(PlayerShaderType type) {
+    close();
+    mutex.lock();
     //顶点和片元shader初始化
     //顶点shader初始化
-    vsh = initShader(vertexShader,GL_VERTEX_SHADER);
-    if (vsh==0){
+    vsh = initShader(vertexShader, GL_VERTEX_SHADER);
+    if (vsh == 0) {
+        mutex.unlock();
         LOGE("initShader GL_VERTEX_SHADER failed!");
         return false;
     }
@@ -114,22 +137,23 @@ bool PlayerShader::init(PlayerShaderType type) {
     //片元YUV420 shader初始化
     switch (type) {
         case PLAYER_SHADER_YUV_420P:
-            fsh = initShader(fragYUV420P,GL_FRAGMENT_SHADER);
+            fsh = initShader(fragYUV420P, GL_FRAGMENT_SHADER);
             break;
         case PLAYER_SHADER_YUV411P:
             break;
         case PLAYER_SHADER_NV12:
-            fsh = initShader(fragNV12,GL_FRAGMENT_SHADER);
+            fsh = initShader(fragNV12, GL_FRAGMENT_SHADER);
             break;
         case PLAYER_SHADER_NV21:
-            fsh = initShader(fragNV21,GL_FRAGMENT_SHADER);
+            fsh = initShader(fragNV21, GL_FRAGMENT_SHADER);
             break;
         default:
-            LOGE("player format is error %d",type);
-            break;
+            mutex.unlock();
+            LOGE("player format is error %d", type);
             return false;
     }
-    if (fsh==0){
+    if (fsh == 0) {
+        mutex.unlock();
         LOGE("initShader GL_FRAGMENT_SHADER failed!");
         return false;
     }
@@ -137,18 +161,20 @@ bool PlayerShader::init(PlayerShaderType type) {
 
     //创建渲染程序
     program = glCreateProgram();
-    if (program==0){
+    if (program == 0) {
+        mutex.unlock();
         LOGE("glCreateProgram FAILED");
         return false;
     }
     //渲染程序中加入着色器
-    glAttachShader(program,vsh);
-    glAttachShader(program,fsh);
+    glAttachShader(program, vsh);
+    glAttachShader(program, fsh);
     //链接程序
     glLinkProgram(program);
     GLint status = 0;
-    glGetProgramiv(program,GL_LINK_STATUS,&status);
-    if (status!=GL_TRUE){
+    glGetProgramiv(program, GL_LINK_STATUS, &status);
+    if (status != GL_TRUE) {
+        mutex.unlock();
         LOGE("glGetProgramiv failed");
         return false;
     }
@@ -158,58 +184,58 @@ bool PlayerShader::init(PlayerShaderType type) {
 
     //加入三维顶点数据 两个三角形组成正方形
     static float vers[] = {
-            1.0f,-1.0f,0.0f,
-            -1.0f,-1.0f,0.0f,
-            1.0f,1.0f,0.0f,
-            -1.0f,1.0f,0.0f,
+            1.0f, -1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            -1.0f, 1.0f, 0.0f,
     };
-    GLuint apos = glGetAttribLocation(program,"aPosition");
+    GLuint apos = glGetAttribLocation(program, "aPosition");
     glEnableVertexAttribArray(apos);
     //传递顶点
-    glVertexAttribPointer(apos,3,GL_FLOAT,GL_FALSE,12,vers);
+    glVertexAttribPointer(apos, 3, GL_FLOAT, GL_FALSE, 12, vers);
 
     //加入材质坐标数据
     static float txts[] = {
-            1.0f,0.0f , //右下
-            0.0f,0.0f,
-            1.0f,1.0f,
-            0.0,1.0
+            1.0f, 0.0f, //右下
+            0.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0, 1.0
     };
-    GLuint atex = glGetAttribLocation(program,"aTexCoord");
+    GLuint atex = glGetAttribLocation(program, "aTexCoord");
     glEnableVertexAttribArray(atex);
-    glVertexAttribPointer(atex,2,GL_FLOAT,GL_FALSE,8,txts);
+    glVertexAttribPointer(atex, 2, GL_FLOAT, GL_FALSE, 8, txts);
 
     //材质纹理初始化
     //设置纹理层
-    glUniform1i( glGetUniformLocation(program,"yTexture"),0); //对于纹理第1层
+    glUniform1i(glGetUniformLocation(program, "yTexture"), 0); //对于纹理第1层
     switch (type) {
         case PLAYER_SHADER_YUV_420P:
-            glUniform1i( glGetUniformLocation(program,"uTexture"),1); //对于纹理第2层
-            glUniform1i( glGetUniformLocation(program,"vTexture"),2); //对于纹理第3层
+            glUniform1i(glGetUniformLocation(program, "uTexture"), 1); //对于纹理第2层
+            glUniform1i(glGetUniformLocation(program, "vTexture"), 2); //对于纹理第3层
             break;
         case PLAYER_SHADER_YUV411P:
             break;
         case PLAYER_SHADER_NV12:
         case PLAYER_SHADER_NV21:
-            glUniform1i( glGetUniformLocation(program,"uvTexture"),1); //对于纹理第2层
-            break;
-        default:
-            LOGE("player format is error %d",type);
+            glUniform1i(glGetUniformLocation(program, "uvTexture"), 1); //对于纹理第2层
             break;
     }
+    mutex.unlock();
     LOGD("初始化Shader成功！");
-
     return true;
 }
 
 
-void PlayerShader::draw()
-{
-    if(!program)
+void PlayerShader::draw() {
+    mutex.lock();
+    if (!program) {
+        mutex.unlock();
         return;
+    }
     //三维绘制
     //绘制存放的顶点信息
-    glDrawArrays(GL_TRIANGLE_STRIP,0,4);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    mutex.unlock();
 }
 
 /***
@@ -220,27 +246,27 @@ void PlayerShader::draw()
  * @param buf
  * getTexture会被调用3次，3次的结果就是材质
  */
-void PlayerShader::getTexture(unsigned int index,int width,int height, unsigned char *buf,bool isAlpha)
-{
+void PlayerShader::getTexture(unsigned int index, int width, int height, unsigned char *buf,
+                              bool isAlpha) {
     unsigned int format = GL_LUMINANCE;
     if (isAlpha)
         format = GL_LUMINANCE_ALPHA;
-    if(texts[index] == 0)
-    {
+    mutex.lock();
+    if (texts[index] == 0) {
         //材质初始化
-        glGenTextures(1,&texts[index]);
+        glGenTextures(1, &texts[index]);
 
         //设置纹理属性
-        glBindTexture(GL_TEXTURE_2D,texts[index]);
+        glBindTexture(GL_TEXTURE_2D, texts[index]);
         //缩小的过滤器
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         //设置纹理的格式和大小
         //如果是uv12会有区别
         glTexImage2D(GL_TEXTURE_2D,
                      0,           //细节基本 0默认
                      format,//gpu内部格式 亮度，灰度图
-                     width,height, //拉升到全屏
+                     width, height, //拉升到全屏
                      0,             //边框
                      format,//数据的像素格式 亮度，灰度图 要与上面一致
                      GL_UNSIGNED_BYTE, //像素的数据类型
@@ -250,9 +276,10 @@ void PlayerShader::getTexture(unsigned int index,int width,int height, unsigned 
 
 
     //激活第1层纹理,绑定到创建的opengl纹理
-    glActiveTexture(GL_TEXTURE0+index);
-    glBindTexture(GL_TEXTURE_2D,texts[index]);
+    glActiveTexture(GL_TEXTURE0 + index);
+    glBindTexture(GL_TEXTURE_2D, texts[index]);
     //替换纹理内容
-    glTexSubImage2D(GL_TEXTURE_2D,0,0,0,width,height,format,GL_UNSIGNED_BYTE,buf);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, buf);
 
+    mutex.unlock();
 }
