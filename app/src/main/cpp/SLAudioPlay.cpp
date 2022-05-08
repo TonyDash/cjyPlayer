@@ -52,7 +52,9 @@ void SLAudioPlay::PlayCall(void *bufq)
     if(!buf)
         return;
     memcpy(buf,d.data,d.size);
+    mutex.lock();
     (*bf)->Enqueue(bf,buf,d.size);
+    mutex.unlock();
     d.drop();//这里清理数据，避免访问是发生异常，所以需要复制数据
 }
 
@@ -68,10 +70,37 @@ static void PcmCall(SLAndroidSimpleBufferQueueItf bf,void *contex)
     ap->PlayCall((void *)bf);
 }
 
+void SLAudioPlay::close() {
+    mutex.lock();
+    //停止播放
+    //需要判断指针不能为空，指针指向的内容也不能为空
+    if (iplayer&&(*iplayer)){
+        (*iplayer)->SetPlayState(iplayer,SL_PLAYSTATE_STOPPED);
+    }
+    //清理播放队列
+    if (pcmQue&&(*pcmQue)){
+        (*pcmQue)->Clear(pcmQue);
+    }
+    //销毁player对象
+    if (player&&(*player)){
+        (*player)->Destroy(player);
+    }
+    //销毁混音器
+    if (mix&&(*mix)){
+        (*mix)->Destroy(mix);
+    }
+    //销毁播放引擎
+    if (engineSL &&(*engineSL)){
+        (*engineSL)->Destroy(engineSL);
+    }
+    mutex.unlock();
+}
+
 
 bool SLAudioPlay::StartPlay(PlayerParameter out)
 {
-
+    close();
+    mutex.lock();
     //1 创建引擎
     eng = CreateSL();
     if(eng)
@@ -81,6 +110,7 @@ bool SLAudioPlay::StartPlay(PlayerParameter out)
     else
     {
         LOGE("CreateSL failed！ ");
+        mutex.unlock();
         return false;
     }
 
@@ -91,12 +121,14 @@ bool SLAudioPlay::StartPlay(PlayerParameter out)
     if(re !=SL_RESULT_SUCCESS )
     {
         LOGE("SL_RESULT_SUCCESS failed!");
+        mutex.unlock();
         return false;
     }
     re = (*mix)->Realize(mix,SL_BOOLEAN_FALSE);
     if(re !=SL_RESULT_SUCCESS )
     {
         LOGE("(*mix)->Realize failed!");
+        mutex.unlock();
         return false;
     }
     SLDataLocator_OutputMix outmix = {SL_DATALOCATOR_OUTPUTMIX,mix};
@@ -125,6 +157,7 @@ bool SLAudioPlay::StartPlay(PlayerParameter out)
     if(re !=SL_RESULT_SUCCESS )
     {
         LOGE("CreateAudioPlayer failed!");
+        mutex.unlock();
         return false;
     } else{
         LOGI("CreateAudioPlayer success!");
@@ -135,12 +168,14 @@ bool SLAudioPlay::StartPlay(PlayerParameter out)
     if(re !=SL_RESULT_SUCCESS )
     {
         LOGE("GetInterface SL_IID_PLAY failed!");
+        mutex.unlock();
         return false;
     }
     re = (*player)->GetInterface(player,SL_IID_BUFFERQUEUE,&pcmQue);
     if(re !=SL_RESULT_SUCCESS )
     {
         LOGE("GetInterface SL_IID_BUFFERQUEUE failed!");
+        mutex.unlock();
         return false;
     }
 
@@ -153,6 +188,7 @@ bool SLAudioPlay::StartPlay(PlayerParameter out)
     //启动队列回调
     (*pcmQue)->Enqueue(pcmQue,"",1);
     LOGI("SLAudioPlay::StartPlay success!");
+    mutex.unlock();
     return true;
 }
 

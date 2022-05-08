@@ -12,6 +12,7 @@
 
 class IAudioPlay: public IObserver {
 public:
+    virtual void close()=0;
     //缓冲区如果打到最大值，阻塞
     virtual void Update(PlayerData data);
     //获取缓冲队列中的数据，若没有数据，则阻塞
