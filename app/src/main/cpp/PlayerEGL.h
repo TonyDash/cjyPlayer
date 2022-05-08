@@ -12,6 +12,7 @@ class PlayerEGL {
 public:
     //定义为void，避免外部类型依赖
     virtual bool initEGL(void *win)=0;
+    virtual void close()=0;
     virtual void draw() = 0;
     static PlayerEGL *get();//提供获取实例的方法,单例模式
 
