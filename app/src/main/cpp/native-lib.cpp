@@ -19,8 +19,8 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     /**测试多次打开文件
      * 看是否上一次资源是否有被释放和其他bug
      * **/
-    IPlayerProxy::get()->open("/sdcard/Download/1080.mp4");
-    IPlayerProxy::get()->startThread();
+//    IPlayerProxy::get()->open("/sdcard/Download/1080.mp4");
+//    IPlayerProxy::get()->startThread();
     /****/
 
     return JNI_VERSION_1_4;
