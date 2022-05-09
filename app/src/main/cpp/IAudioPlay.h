@@ -12,6 +12,7 @@
 
 class IAudioPlay: public IObserver {
 public:
+    virtual void clear();
     virtual void close()=0;
     //缓冲区如果打到最大值，阻塞
     virtual void Update(PlayerData data);

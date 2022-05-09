@@ -71,6 +71,7 @@ static void PcmCall(SLAndroidSimpleBufferQueueItf bf,void *contex)
 }
 
 void SLAudioPlay::close() {
+    IAudioPlay::clear();
     mutex.lock();
     //停止播放
     //需要判断指针不能为空，指针指向的内容也不能为空

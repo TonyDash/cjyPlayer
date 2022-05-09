@@ -16,6 +16,9 @@ public:
     virtual bool open(PlayerParameter parameter,bool isHard = false)=0;
 
     virtual void close()=0;
+
+    virtual void clear();
+
     //future模型 发送数据到线程解码
     virtual bool sendPacket(PlayerData data)=0;
 

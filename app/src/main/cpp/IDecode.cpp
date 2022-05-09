@@ -5,6 +5,17 @@
 #include "IDecode.h"
 #include "PlayerLog.h"
 
+void IDecode::clear() {
+    packetMutex.lock();
+    while (!packets.empty()){
+        packets.front().drop();
+        packets.pop_front();
+    }
+    pts = 0;
+    synPts =0;
+    packetMutex.unlock();
+}
+
 void IDecode::main() {
     while (!isExit){
         packetMutex.lock();
@@ -44,7 +55,7 @@ void IDecode::main() {
                 pts = frame.pts;
 //                LOGD("recvFrame %d",frame.size);
                 //发送数据到所有观察者
-                this->notify(packs);
+                this->notify(frame);
             }
         }
         packs.drop();

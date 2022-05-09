@@ -12,6 +12,8 @@ class IPlayerProxy : public IPlayer {
 public:
     virtual bool open(const char *path);
 
+    virtual void close();
+
     virtual bool startThread();
 
     virtual void initView(void *win);

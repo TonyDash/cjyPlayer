@@ -40,3 +40,12 @@ void IAudioPlay::Update(PlayerData data) {
     }
 
 }
+
+void IAudioPlay::clear() {
+    framesMutex.lock();
+    while (!frames.empty()){
+        frames.front().drop();
+        frames.pop_front();
+    }
+    framesMutex.unlock();
+}

@@ -17,7 +17,42 @@ IPlayer *IPlayer::get(unsigned char index) {
     return &p[index];
 }
 
+void IPlayer::close() {
+    mutex.lock();
+    //先关闭主体线程，再清理观察者
+    //清理同步线程
+    PlayerThread::stopThread();
+    //清理解封装
+    if (demux)
+    demux->stopThread();
+    //清理解码
+    if (vDecode)
+    vDecode->stopThread();
+    if (aDecode)
+    aDecode->stopThread();
+    //清理缓冲队列
+    if (vDecode)
+    vDecode->clear();
+    if (aDecode)
+    aDecode->clear();
+    if (audioPlay)
+    audioPlay->clear();
+    //清理资源
+    if (audioPlay)
+    audioPlay->close();
+    if (videoView)
+    videoView->close();
+    if (vDecode)
+    vDecode->close();
+    if (aDecode)
+    aDecode->close();
+    if (demux)
+    demux->close();
+    mutex.unlock();
+}
+
 bool IPlayer::open(const char *path) {
+    close();
     mutex.lock();
     //解封装
     if (!demux || !demux->open(path)) {
@@ -49,15 +84,15 @@ bool IPlayer::open(const char *path) {
 
 bool IPlayer::startThread() {
     mutex.lock();
+    if (audioPlay)audioPlay->StartPlay(demux->getAPara());
+    //视频可以快进快退，音频不可以，所以音频先于视频启动
+    if (aDecode)aDecode->startThread();
+    if (vDecode)vDecode->startThread();
     if (!demux || !demux->startThread()) {
         mutex.unlock();
         LOGE("demux startThread failed");
         return false;
     }
-    //视频可以快进快退，音频不可以，所以音频先于视频启动
-    if (aDecode)aDecode->startThread();
-    if (audioPlay)audioPlay->StartPlay(demux->getAPara());
-    if (vDecode)vDecode->startThread();
     PlayerThread::startThread();
     mutex.unlock();
     return true;

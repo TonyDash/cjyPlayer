@@ -16,6 +16,7 @@ void FFDecode::initHard(void *vm) {
 }
 
 void FFDecode::close() {
+    IDecode::clear();
     mutex.lock();
     pts = 0;
     if (frame) {
@@ -59,12 +60,12 @@ bool FFDecode::open(PlayerParameter parameter, bool isHard) {
         return false;
     }
     if (codec->codec_type == AVMEDIA_TYPE_VIDEO) {
-        isAudio = false;
+        this->isAudio = false;
     } else {
         //这里偷懒了，如果需要解码字幕，就会有问题
         //因为字幕不是视频流也不是音频流
         //严谨的话，需要再判断
-        isAudio = true;
+        this->isAudio = true;
     }
     mutex.unlock();
     return true;

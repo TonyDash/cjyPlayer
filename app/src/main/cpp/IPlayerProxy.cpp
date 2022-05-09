@@ -5,6 +5,13 @@
 #include "IPlayerProxy.h"
 #include "FFPlayerBuilder.h"
 
+void IPlayerProxy::close() {
+    mutex.lock();
+    if (player)
+        player->close();
+    mutex.unlock();
+}
+
 bool IPlayerProxy::open(const char *path) {
     bool result = false;
     mutex.lock();
