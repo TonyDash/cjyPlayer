@@ -66,6 +66,83 @@ double IPlayer::playPos() {
     mutex.unlock();
     return pos;
 }
+void IPlayer::SetPause(bool isP)
+{
+    mutex.lock();
+    PlayerThread::SetPause(isP);
+    if(demux)
+        demux->SetPause(isP);
+    if(vDecode)
+        vDecode->SetPause(isP);
+    if(aDecode)
+        aDecode->SetPause(isP);
+    if(audioPlay)
+        audioPlay->SetPause(isP);
+    mutex.unlock();
+}
+
+bool IPlayer::Seek(double pos)
+{
+    bool re = false;
+    if(!demux) return false;
+
+    //暂停所有线程
+    SetPause(true);
+    mutex.lock();
+    //清理缓冲
+    //2 清理缓冲队列
+    if(vDecode)
+        vDecode->clear(); //清理缓冲队列，清理ffmpeg的缓冲
+    if(aDecode)
+        aDecode->clear();
+    if(audioPlay)
+        audioPlay->clear();
+
+
+    re = demux->Seek(pos); //seek跳转到关键帧
+    if(!vDecode)
+    {
+        mutex.unlock();
+        SetPause(false);
+        return re;
+    }
+    //解码到实际需要显示的帧
+    int seekPts = pos*demux->totalMs;
+    while(!isExit)
+    {
+        PlayerData pkt = demux->Read();
+        if(pkt.size<=0)break;
+        if(pkt.isAudio)
+        {
+            if(pkt.pts < seekPts)
+            {
+                pkt.drop();
+                continue;
+            }
+            //写入缓冲队列
+            demux->notify(pkt);
+            continue;
+        }
+
+        //解码需要显示的帧之前的数据
+        vDecode->sendPacket(pkt);
+        pkt.drop();
+        PlayerData data = vDecode->recvFrame();
+        if(data.size <=0)
+        {
+            continue;
+        }
+        if(data.pts >= seekPts)
+        {
+            //vdecode->Notify(data);
+            break;
+        }
+    }
+    mutex.unlock();
+
+    SetPause(false);
+    return re;
+}
 
 bool IPlayer::open(const char *path) {
     close();

@@ -15,6 +15,9 @@ public:
     //打开文件，或者流媒体、rtmp、rtsp、http
     virtual bool open(const char *url)=0;
 
+    //seek 位置 pos 0.0~1.0
+    virtual bool Seek(double pos) = 0;
+
     virtual void close()=0;
     virtual PlayerParameter getVPara()=0;
 

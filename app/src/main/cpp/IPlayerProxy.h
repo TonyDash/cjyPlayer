@@ -20,8 +20,11 @@ public:
 
     void init(void *vm=0);
 
+    virtual bool Seek(double pos);
     //获取当前的播放进度 0.0-1.0
     virtual double playPos();
+    virtual void SetPause(bool isP);
+    virtual bool IsPause();
 
     static IPlayerProxy *get() {
         static IPlayerProxy playerProxy;

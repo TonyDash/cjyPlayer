@@ -15,6 +15,33 @@ static double r2d(AVRational r) {
     return r.num == 0 || r.den == 0 ? 0. : (double) r.num / (double) r.den;
 }
 
+
+//seek 位置 pos 0.0~1.0
+bool FFDemux::Seek(double pos)
+{
+    if(pos<0 || pos > 1)
+    {
+        LOGE("Seek value must 0.0~1.0");
+        return false;
+    }
+    bool re = false;
+    mux.lock();
+    if(!ic)
+    {
+        mux.unlock();
+        return false;
+    }
+    //清理读取的缓冲
+    avformat_flush(ic);
+    long long seekPts = 0;
+    seekPts = ic->streams[videoStream]->duration*pos;
+
+    //往后跳转到关键帧
+    re = av_seek_frame(ic,videoStream,seekPts,AVSEEK_FLAG_FRAME|AVSEEK_FLAG_BACKWARD);
+    mux.unlock();
+    return re;
+}
+
 void FFDemux::close() {
     mutex.lock();
     if (ic)

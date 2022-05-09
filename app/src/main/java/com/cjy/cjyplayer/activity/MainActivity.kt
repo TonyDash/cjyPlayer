@@ -87,5 +87,6 @@ class MainActivity : BaseActivity(),Runnable, SeekBar.OnSeekBarChangeListener {
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        Seek(seekBar!!.progress.toDouble() / seekBar!!.max.toDouble())
     }
 }

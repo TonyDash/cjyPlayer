@@ -22,6 +22,36 @@ double IPlayerProxy::playPos() {
     return pos;
 }
 
+
+bool IPlayerProxy::IsPause()
+{
+    bool re = false;
+    mutex.lock();
+    if(player)
+        re = player->IsPause();
+    mutex.unlock();
+    return re;
+}
+
+void IPlayerProxy::SetPause(bool isP)
+{
+    mutex.lock();
+    if(player)
+        player->SetPause(isP);
+    mutex.unlock();
+}
+bool IPlayerProxy::Seek(double pos)
+{
+    bool re = false;
+    mutex.lock();
+    if(player)
+    {
+        re = player->Seek(pos);
+    }
+    mutex.unlock();
+    return re;
+}
+
 bool IPlayerProxy::open(const char *path) {
     bool result = false;
     mutex.lock();

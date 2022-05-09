@@ -16,6 +16,14 @@ public:
     //但是由于性能和消耗问题，结束进程或者不需要继续执行时，又必须停止线程
     //所以需要安全地停止，例如增加一个标志位，通过对标志位的赋值来控制是否停止线程
     virtual void stopThread();
+
+    virtual void SetPause(bool isP);
+
+    virtual bool IsPause()
+    {
+        isPausing = isPause;
+        return isPause;
+    }
     //入口主函数
     virtual void main(){
 
@@ -23,6 +31,8 @@ public:
 protected:
     bool isExit = false;
     bool isRunning = false;
+    bool isPause = false;
+    bool isPausing = false;
 private:
     virtual void threadMain();
 };

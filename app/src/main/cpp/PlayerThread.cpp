@@ -18,6 +18,21 @@ void playerSleep(int mis){
     this_thread::sleep_for(du);
 }
 
+void PlayerThread::SetPause(bool isP)
+{
+    isPause = isP;
+    //等待100毫秒
+    for(int i = 0; i < 10; i++)
+    {
+        if(isPausing == isP)
+        {
+            break;
+        }
+        playerSleep(10);
+    }
+
+}
+
 bool PlayerThread::startThread() {
     isExit = false;
     //函数的名称地址：&PlayerThread::threadMain
