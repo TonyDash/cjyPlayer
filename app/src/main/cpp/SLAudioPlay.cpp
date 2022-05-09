@@ -53,7 +53,8 @@ void SLAudioPlay::PlayCall(void *bufq)
         return;
     memcpy(buf,d.data,d.size);
     mutex.lock();
-    (*bf)->Enqueue(bf,buf,d.size);
+    if(pcmQue&&(*pcmQue))
+    (*pcmQue)->Enqueue(pcmQue,buf,d.size);
     mutex.unlock();
     d.drop();//这里清理数据，避免访问是发生异常，所以需要复制数据
 }
@@ -83,7 +84,8 @@ void SLAudioPlay::close() {
         (*pcmQue)->Clear(pcmQue);
     }
     //销毁player对象
-    if (player&&(*player)){
+    if(player && (*player))
+    {
         (*player)->Destroy(player);
     }
     //销毁混音器
@@ -94,6 +96,12 @@ void SLAudioPlay::close() {
     if (engineSL &&(*engineSL)){
         (*engineSL)->Destroy(engineSL);
     }
+    engineSL = NULL;
+    eng = NULL;
+    mix = NULL;
+    player = NULL;
+    iplayer = NULL;
+    pcmQue = NULL;
     mutex.unlock();
 }
 
