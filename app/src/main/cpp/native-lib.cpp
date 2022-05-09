@@ -49,3 +49,13 @@ Java_com_cjy_cjyplayer_activity_ChoiceFileActivity_open(JNIEnv *env, jobject thi
     IPlayerProxy::get()->startThread();
     env->ReleaseStringUTFChars(url_,url);
 }
+extern "C"
+JNIEXPORT jdouble JNICALL
+Java_com_cjy_cjyplayer_activity_MainActivity_PlayPos(JNIEnv *env, jobject thiz) {
+    return IPlayerProxy::get()->playPos();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_cjy_cjyplayer_activity_MainActivity_Seek(JNIEnv *env, jobject thiz, jdouble pos) {
+
+}

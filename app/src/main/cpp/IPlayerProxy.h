@@ -20,6 +20,9 @@ public:
 
     void init(void *vm=0);
 
+    //获取当前的播放进度 0.0-1.0
+    virtual double playPos();
+
     static IPlayerProxy *get() {
         static IPlayerProxy playerProxy;
         return &playerProxy;

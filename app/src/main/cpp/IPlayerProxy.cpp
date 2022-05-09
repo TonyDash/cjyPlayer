@@ -12,11 +12,23 @@ void IPlayerProxy::close() {
     mutex.unlock();
 }
 
+double IPlayerProxy::playPos() {
+    double pos = 0.0;
+    mutex.lock();
+    if (player){
+        pos = player->playPos();
+    }
+    mutex.unlock();
+    return pos;
+}
+
 bool IPlayerProxy::open(const char *path) {
     bool result = false;
     mutex.lock();
-    if (player)
+    if (player) {
+        player->isHardDecode = isHardDecode;
         result = player->open(path);
+    }
     mutex.unlock();
     return result;
 }

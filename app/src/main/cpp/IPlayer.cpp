@@ -51,6 +51,22 @@ void IPlayer::close() {
     mutex.unlock();
 }
 
+double IPlayer::playPos() {
+    double pos = 0.0;
+    mutex.lock();
+    int total = 0;
+    if (demux){
+        total = demux->totalMs;
+    }
+    if (total>0){
+        if (vDecode){
+            pos = vDecode->pts/(double)total;
+        }
+    }
+    mutex.unlock();
+    return pos;
+}
+
 bool IPlayer::open(const char *path) {
     close();
     mutex.lock();

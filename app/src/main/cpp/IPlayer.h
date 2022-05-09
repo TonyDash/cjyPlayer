@@ -29,6 +29,9 @@ public:
 
     virtual void initView(void *win);
 
+    //获取当前的播放进度 0.0-1.0
+    virtual double playPos();
+
     //视频是否硬解码
     bool isHardDecode = true;
 

@@ -30,7 +30,6 @@ class ChoiceFileActivity : BaseActivity() {
                 this@ChoiceFileActivity.finish()
             }
         }
-
     }
 
     override fun initData() {
