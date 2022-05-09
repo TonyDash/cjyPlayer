@@ -7,9 +7,18 @@
 
 void IDemux::main() {
     while (!isExit) {
+
+        if(IsPause())
+        {
+            playerSleep(2);
+            continue;
+        }
+
         PlayerData data = Read();
         if (data.size>0){
             notify(data);
+        } else{
+            playerSleep(2);
         }
 //        LOGD("Read data size is %d", data.size);
         //if (data.size <= 0)break;

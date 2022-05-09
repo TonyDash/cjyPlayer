@@ -18,6 +18,13 @@ void IDecode::clear() {
 
 void IDecode::main() {
     while (!isExit){
+
+        if(IsPause())
+        {
+            playerSleep(2);
+            continue;
+        }
+
         packetMutex.lock();
         //判断音视频同步
         //不是音频，同时音频同步基数大于0

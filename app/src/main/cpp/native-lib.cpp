@@ -59,3 +59,8 @@ JNIEXPORT void JNICALL
 Java_com_cjy_cjyplayer_activity_MainActivity_Seek(JNIEnv *env, jobject thiz, jdouble pos) {
     IPlayerProxy::get()->Seek(pos);
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_cjy_cjyplayer_activity_CjyPlayer_PlayOrPause(JNIEnv *env, jobject thiz) {
+    IPlayerProxy::get()->SetPause(!IPlayerProxy::get()->IsPause());
+}

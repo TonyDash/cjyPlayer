@@ -8,6 +8,12 @@
 PlayerData IAudioPlay::getData() {
     PlayerData data;
     while (!isExit){
+
+        if(IsPause())
+        {
+            playerSleep(2);
+            continue;
+        }
         framesMutex.lock();
         if (!frames.empty()){
             //有数据返回
