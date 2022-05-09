@@ -13,8 +13,8 @@ extern "C"
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
 //    FFDecode::initHard(vm);
     IPlayerProxy::get()->init(vm);
-    IPlayerProxy::get()->open("/sdcard/Download/v1080.mp4");
-    IPlayerProxy::get()->startThread();
+//    IPlayerProxy::get()->open("/sdcard/Download/v1080.mp4");
+//    IPlayerProxy::get()->startThread();
 
     /**测试多次打开文件
      * 看是否上一次资源是否有被释放和其他bug
@@ -40,4 +40,12 @@ Java_com_cjy_cjyplayer_activity_CjyPlayer_initView(JNIEnv *env, jobject thiz,
     //创建窗口对象
     ANativeWindow *window = ANativeWindow_fromSurface(env, surface_view);
     IPlayerProxy::get()->initView(window);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_cjy_cjyplayer_activity_ChoiceFileActivity_open(JNIEnv *env, jobject thiz, jstring url_) {
+    const char *url = env->GetStringUTFChars(url_,0);
+    IPlayerProxy::get()->open(url);
+    IPlayerProxy::get()->startThread();
+    env->ReleaseStringUTFChars(url_,url);
 }

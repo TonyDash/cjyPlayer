@@ -100,6 +100,7 @@ bool IPlayer::startThread() {
 
 void IPlayer::initView(void *win) {
     if (videoView) {
+        videoView->close();
         videoView->setRender(win);
     }
 }

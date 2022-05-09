@@ -10,11 +10,11 @@ import javax.microedition.khronos.opengles.GL10
 class CjyPlayer : GLSurfaceView, SurfaceHolder.Callback,GLSurfaceView.Renderer {
 
     constructor(context: Context):super(context){
-
+        setRenderer(this)
     }
 
     constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet) {
-
+        setRenderer(this)
     }
 
 
@@ -22,7 +22,6 @@ class CjyPlayer : GLSurfaceView, SurfaceHolder.Callback,GLSurfaceView.Renderer {
          //初始化OpenGL EGL 显示
         initView(holder.surface)
 
-        setRenderer(this)
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {

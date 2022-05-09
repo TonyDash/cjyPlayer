@@ -21,4 +21,21 @@
         app:layout_constraintLeft_toLeftOf="@id/editLocalPath"
         app:layout_constraintTop_toBottomOf="@id/editLocalPath" />
 
+    <EditText
+        android:id="@+id/editLive"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="rtmp://live.hkstv.hk.lxdns.com/live/hks"
+        app:layout_constraintTop_toBottomOf="@id/btnOpenPath"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/btnOpenLive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="open live"
+        app:layout_constraintLeft_toLeftOf="@id/editLive"
+        app:layout_constraintTop_toBottomOf="@id/editLive" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
