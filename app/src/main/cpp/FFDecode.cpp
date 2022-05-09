@@ -14,6 +14,14 @@ extern "C"
 void FFDecode::initHard(void *vm) {
     av_jni_set_java_vm(vm, 0);
 }
+void FFDecode::Clear()
+{
+    IDecode::clear();
+    mux.lock();
+    if(codec)
+        avcodec_flush_buffers(codec);
+    mux.unlock();
+}
 
 void FFDecode::close() {
     IDecode::clear();

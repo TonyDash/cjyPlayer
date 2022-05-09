@@ -18,6 +18,7 @@ public:
     virtual bool open(PlayerParameter parameter,bool isHard = false);
 
     virtual void close();
+    virtual void Clear();
 
     bool sendPacket(PlayerData data) override;
 
