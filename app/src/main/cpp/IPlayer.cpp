@@ -30,6 +30,8 @@ void IPlayer::close() {
     vDecode->stopThread();
     if (aDecode)
     aDecode->stopThread();
+    if(audioPlay)
+        audioPlay->stopThread();
     //清理缓冲队列
     if (vDecode)
     vDecode->clear();

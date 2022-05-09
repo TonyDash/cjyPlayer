@@ -196,6 +196,7 @@ bool SLAudioPlay::StartPlay(PlayerParameter out)
 
     //启动队列回调
     (*pcmQue)->Enqueue(pcmQue,"",1);
+    isExit = false;
     LOGI("SLAudioPlay::StartPlay success!");
     mutex.unlock();
     return true;

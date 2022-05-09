@@ -7,6 +7,8 @@
 
 PlayerData IAudioPlay::getData() {
     PlayerData data;
+
+    isRunning = true;
     while (!isExit){
 
         if(IsPause())
@@ -26,6 +28,7 @@ PlayerData IAudioPlay::getData() {
         framesMutex.unlock();
         playerSleep(1);
     }
+    isRunning = false;
     //未获取数据
     return data;
 }

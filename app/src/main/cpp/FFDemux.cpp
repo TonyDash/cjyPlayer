@@ -149,8 +149,8 @@ PlayerData FFDemux::Read() {
     //读取帧数据
     int re = av_read_frame(ic, packet);
     if (re != 0) {
-        av_packet_free(&packet);//清空对象并且减少引用计数
         mutex.unlock();
+        av_packet_free(&packet);//清空对象并且减少引用计数
         return {};
     }
 //    LOGI("packet size is %d pts is %lld",packet->size,packet->pts);
@@ -165,8 +165,8 @@ PlayerData FFDemux::Read() {
         //av_packet_alloc会分配出一个对象
         //av_read_frame又会分配一个空间
         //如果不释放会发生内存泄漏
-        av_packet_free(&packet);
         mutex.unlock();
+        av_packet_free(&packet);
         return {};
     }
     //转换pts
