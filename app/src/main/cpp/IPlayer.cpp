@@ -62,10 +62,11 @@ double IPlayer::playPos() {
     }
     if (total>0){
         if (vDecode){
-            pos = vDecode->pts/(double)total;
+            pos = (double)vDecode->pts/(double)total;
         }
     }
     mutex.unlock();
+//    LOGD("pos is %f",pos);
     return pos;
 }
 void IPlayer::SetPause(bool isP)
@@ -179,15 +180,15 @@ bool IPlayer::open(const char *path) {
 
 bool IPlayer::startThread() {
     mutex.lock();
-    if (audioPlay)audioPlay->StartPlay(demux->getAPara());
-    //视频可以快进快退，音频不可以，所以音频先于视频启动
-    if (aDecode)aDecode->startThread();
     if (vDecode)vDecode->startThread();
     if (!demux || !demux->startThread()) {
         mutex.unlock();
         LOGE("demux startThread failed");
         return false;
     }
+    //视频可以快进快退，音频不可以，所以音频先于视频启动
+    if (aDecode)aDecode->startThread();
+    if (audioPlay)audioPlay->StartPlay(demux->getAPara());
     PlayerThread::startThread();
     mutex.unlock();
     return true;
@@ -214,7 +215,7 @@ void IPlayer::main() {
         //获取音频的pts，通知视频
         //时间基数不统一
         int aPts = audioPlay->pts;
-        LOGD("apts = %d",aPts);
+//        LOGD("apts = %d",aPts);
         vDecode->synPts = aPts;
         mutex.unlock();
         playerSleep(2);

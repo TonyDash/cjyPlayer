@@ -3,6 +3,7 @@ package com.cjy.cjyplayer.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
@@ -21,6 +22,7 @@ class MainActivity : BaseActivity(),Runnable, SeekBar.OnSeekBarChangeListener {
     override fun initLayout() {
         btnOpen = findViewById(R.id.btnOpen)
         seekBar = findViewById(R.id.seekBar)
+        seekBar?.max = 1000
         btnOpen?.setOnClickListener {
             checkPermission(object : RequestPermissionListener {
                 override fun permissionAllGranted() {
@@ -58,8 +60,11 @@ class MainActivity : BaseActivity(),Runnable, SeekBar.OnSeekBarChangeListener {
 
 
     override fun run() {
+        var percent = 0
         while (true) {
-            seekBar?.setProgress((PlayPos() * 1000).toInt())
+            percent = (PlayPos() * 1000).toInt()
+            Log.d("TAG","percent is :$percent")
+            seekBar?.progress = percent
             try {
                 Thread.sleep(40)
             } catch (e: InterruptedException) {

@@ -34,7 +34,7 @@ PlayerData IAudioPlay::getData() {
 }
 
 void IAudioPlay::update(PlayerData data) {
-    LOGD("iAudioPlay::Update %d",data.size);
+//    LOGD("iAudioPlay::Update %d",data.size);
     //压入缓冲队列
     if (data.size <= 0 || !data.data)return;
     while (!isExit) {
@@ -46,6 +46,7 @@ void IAudioPlay::update(PlayerData data) {
         }
         frames.push_back(data);
         framesMutex.unlock();
+        break;
     }
 
 }

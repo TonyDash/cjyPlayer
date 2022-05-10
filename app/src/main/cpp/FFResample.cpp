@@ -79,7 +79,7 @@ PlayerData FFResample::resample(PlayerData inData) {
         return {};
     }
     out.pts = inData.pts;
-    LOGE("swr_convert success = %d", len);
+//    LOGE("swr_convert success = %d", len);
     mutex.unlock();
     return out;
 }
