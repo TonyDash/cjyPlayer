@@ -14,7 +14,7 @@ extern "C"
 void FFDecode::initHard(void *vm) {
     av_jni_set_java_vm(vm, 0);
 }
-void FFDecode::Clear()
+void FFDecode::clear()
 {
     IDecode::clear();
     mux.lock();
@@ -120,8 +120,10 @@ PlayerData FFDecode::recvFrame() {
         data.height = frame->height;
     } else {
         //样本字节数 * 单通道样本数 * 通道数
-        data.size = av_get_bytes_per_sample(static_cast<AVSampleFormat>(frame->format)) *
-                    frame->nb_samples * 2;
+//        data.size = av_get_bytes_per_sample(static_cast<AVSampleFormat>(frame->format)) *
+//                    frame->nb_samples * 2;
+
+        data.size = av_get_bytes_per_sample((AVSampleFormat) frame->format) * frame->nb_samples * 2;
     }
 //    if (!isAudio)
 //    LOGD("data format is %d",frame->format);

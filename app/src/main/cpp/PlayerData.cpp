@@ -12,7 +12,10 @@ void PlayerData::drop() {
     if (!data) return;
     //释放空间
     //强转为指针的指针
+    if (type==AVPACKET_TYPE)
     av_packet_free((AVPacket **)&data);
+    else
+        delete data;
     data = 0;
     size = 0;
 }

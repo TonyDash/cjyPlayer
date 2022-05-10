@@ -21,6 +21,7 @@ class MainActivity : BaseActivity(),Runnable, SeekBar.OnSeekBarChangeListener {
     override fun initLayout() {
         btnOpen = findViewById(R.id.btnOpen)
         seekBar = findViewById(R.id.seekBar)
+        seekBar?.max = 1000
         btnOpen?.setOnClickListener {
             checkPermission(object : RequestPermissionListener {
                 override fun permissionAllGranted() {

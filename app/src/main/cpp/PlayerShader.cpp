@@ -189,7 +189,7 @@ bool PlayerShader::init(PlayerShaderType type) {
             1.0f, 1.0f, 0.0f,
             -1.0f, 1.0f, 0.0f,
     };
-    GLuint apos = glGetAttribLocation(program, "aPosition");
+    GLuint apos = (GLuint)glGetAttribLocation(program, "aPosition");
     glEnableVertexAttribArray(apos);
     //传递顶点
     glVertexAttribPointer(apos, 3, GL_FLOAT, GL_FALSE, 12, vers);

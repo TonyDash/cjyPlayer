@@ -32,7 +32,7 @@ public:
             LOGD("CPlayerTexture init failed win is null");
             return false;
         }
-        if (PlayerEGL::get()->initEGL(win)) {
+        if (!PlayerEGL::get()->initEGL(win)) {
             mutex.unlock();
             return false;
         }
@@ -49,12 +49,12 @@ public:
 
         switch (type) {
             case PLAYER_TEXTURE_YUV_420P:
-                playerShader.getTexture(0, width / 2, height / 2, data[1]);//U
-                playerShader.getTexture(0, width / 2, height / 2, data[2]);//V
+                playerShader.getTexture(1, width / 2, height / 2, data[1]);//U
+                playerShader.getTexture(2, width / 2, height / 2, data[2]);//V
                 break;
             case PLAYER_TEXTURE_NV12:
             case PLAYER_TEXTURE_NV21:
-                playerShader.getTexture(0, width / 2, height / 2, data[1], true);//UV
+                playerShader.getTexture(1, width / 2, height / 2, data[1], true);//UV
                 break;
 
         }
