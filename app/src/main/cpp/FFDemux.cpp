@@ -109,8 +109,6 @@ PlayerParameter FFDemux::getVPara() {
     videoStream = re;
     PlayerParameter parameter;
     parameter.para = ic->streams[re]->codecpar;
-    parameter.channels = ic->streams[re]->codecpar->channels;
-    parameter.sample_rate = ic->streams[0]->codecpar->sample_rate;
     mutex.unlock();
     return parameter;
 }
@@ -132,6 +130,8 @@ PlayerParameter FFDemux::getAPara() {
     audioStream = re;
     PlayerParameter parameter;
     parameter.para = ic->streams[re]->codecpar;
+    parameter.channels = ic->streams[re]->codecpar->channels;
+    parameter.sample_rate = ic->streams[re]->codecpar->sample_rate;
     mutex.unlock();
     return parameter;
 }
@@ -173,7 +173,7 @@ PlayerData FFDemux::Read() {
     packet->pts = packet->pts * (1000 * r2d(ic->streams[packet->stream_index]->time_base));
     packet->dts = packet->dts * (1000 * r2d(ic->streams[packet->stream_index]->time_base));
     data.pts = (int) packet->pts;
-    LOGD("demux pts %d", data.pts);
+//    LOGD("demux pts %d", data.pts);
     mutex.unlock();
     return data;
 }
@@ -182,6 +182,13 @@ FFDemux::FFDemux() {
     static bool isFirst = true;
     if (isFirst) {
         isFirst = false;
+
+        //注册所有封装器
+        av_register_all();
+
+        //注册所有的解码器
+        avcodec_register_all();
+
         //初始化网络
         avformat_network_init();
         LOGI("init ffmpeg network!");

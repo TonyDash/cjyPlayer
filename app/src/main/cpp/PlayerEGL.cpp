@@ -55,8 +55,8 @@ public:
         //1、获取EGLDisplay对象 显示设备
         display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
         if (display == EGL_NO_DISPLAY) {
-            LOGD("eglGetDisplay failed!");
             mutex.unlock();
+            LOGD("eglGetDisplay failed!");
             return false;
         }
         LOGD("eglGetDisplay success!");
@@ -83,9 +83,9 @@ public:
             return false;
         }
         //关联窗口和设备
-        surface = eglCreateWindowSurface(display, config, nWin, 0);
+        surface = eglCreateWindowSurface(display, config, nWin, NULL);
         //4、创建并打开EGL上下文
-        EGLint ctxAttr[] = {
+        const EGLint ctxAttr[] = {
                 EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE
         };
         context = eglCreateContext(display, config, EGL_NO_CONTEXT, ctxAttr);

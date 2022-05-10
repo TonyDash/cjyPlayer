@@ -14,14 +14,15 @@ extern "C"
 void FFDecode::initHard(void *vm) {
     av_jni_set_java_vm(vm, 0);
 }
-void FFDecode::Clear()
-{
+
+void FFDecode::clear() {
     IDecode::clear();
     mux.lock();
-    if(codec)
+    if (codec)
         avcodec_flush_buffers(codec);
     mux.unlock();
 }
+
 
 void FFDecode::close() {
     IDecode::clear();
@@ -42,7 +43,7 @@ bool FFDecode::open(PlayerParameter parameter, bool isHard) {
     if (!parameter.para) return false;
     AVCodecParameters *p = parameter.para;
     //查找解码器
-    const AVCodec *cd = avcodec_find_decoder(p->codec_id);
+    AVCodec *cd = avcodec_find_decoder(p->codec_id);
     if (isHard) {//硬解码
         cd = avcodec_find_decoder_by_name("h264_mediacodec");
     }
@@ -120,8 +121,10 @@ PlayerData FFDecode::recvFrame() {
         data.height = frame->height;
     } else {
         //样本字节数 * 单通道样本数 * 通道数
-        data.size = av_get_bytes_per_sample(static_cast<AVSampleFormat>(frame->format)) *
-                    frame->nb_samples * 2;
+//        data.size = av_get_bytes_per_sample(static_cast<AVSampleFormat>(frame->format)) *
+//                    frame->nb_samples * 2;
+
+        data.size = av_get_bytes_per_sample((AVSampleFormat) frame->format) * frame->nb_samples * 2;
     }
 //    if (!isAudio)
 //    LOGD("data format is %d",frame->format);

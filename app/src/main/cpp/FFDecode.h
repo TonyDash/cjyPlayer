@@ -18,11 +18,11 @@ public:
     virtual bool open(PlayerParameter parameter,bool isHard = false);
 
     virtual void close();
-    virtual void Clear();
+    virtual void clear();
 
-    bool sendPacket(PlayerData data) override;
+    virtual bool sendPacket(PlayerData data);
 
-    PlayerData recvFrame() override;
+    virtual PlayerData recvFrame();
 
 protected:
     AVCodecContext *codec = 0;

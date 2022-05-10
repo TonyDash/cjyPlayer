@@ -140,6 +140,7 @@ bool PlayerShader::init(PlayerShaderType type) {
             fsh = initShader(fragYUV420P, GL_FRAGMENT_SHADER);
             break;
         case PLAYER_SHADER_YUV411P:
+            LOGD("TYPE IS %d",type);
             break;
         case PLAYER_SHADER_NV12:
             fsh = initShader(fragNV12, GL_FRAGMENT_SHADER);
@@ -189,7 +190,7 @@ bool PlayerShader::init(PlayerShaderType type) {
             1.0f, 1.0f, 0.0f,
             -1.0f, 1.0f, 0.0f,
     };
-    GLuint apos = glGetAttribLocation(program, "aPosition");
+    GLuint apos = (GLuint)glGetAttribLocation(program, "aPosition");
     glEnableVertexAttribArray(apos);
     //传递顶点
     glVertexAttribPointer(apos, 3, GL_FLOAT, GL_FALSE, 12, vers);
@@ -214,6 +215,7 @@ bool PlayerShader::init(PlayerShaderType type) {
             glUniform1i(glGetUniformLocation(program, "vTexture"), 2); //对于纹理第3层
             break;
         case PLAYER_SHADER_YUV411P:
+            LOGD("纹理 type %d",type);
             break;
         case PLAYER_SHADER_NV12:
         case PLAYER_SHADER_NV21:

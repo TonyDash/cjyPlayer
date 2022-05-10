@@ -33,7 +33,7 @@ PlayerData IAudioPlay::getData() {
     return data;
 }
 
-void IAudioPlay::Update(PlayerData data) {
+void IAudioPlay::update(PlayerData data) {
     LOGD("iAudioPlay::Update %d",data.size);
     //压入缓冲队列
     if (data.size <= 0 || !data.data)return;

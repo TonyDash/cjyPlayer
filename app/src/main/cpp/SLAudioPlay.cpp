@@ -43,10 +43,10 @@ void SLAudioPlay::PlayCall(void *bufq)
 {
     if(!bufq)return;
     SLAndroidSimpleBufferQueueItf bf = (SLAndroidSimpleBufferQueueItf)bufq;
-    LOGE("SLAudioPlay::PlayCall");
+//    LOGE("SLAudioPlay::PlayCall");
     PlayerData d = getData();
     if (d.size<=0){
-        LOGD("getData() size is 0");
+        LOGE("getData() size is 0");
         return;
     }
     if(!buf)
@@ -114,7 +114,7 @@ bool SLAudioPlay::StartPlay(PlayerParameter out)
     eng = CreateSL();
     if(eng)
     {
-        LOGI("CreateSL success！ ");
+        LOGD("CreateSL success！ ");
     }
     else
     {
@@ -169,7 +169,7 @@ bool SLAudioPlay::StartPlay(PlayerParameter out)
         mutex.unlock();
         return false;
     } else{
-        LOGI("CreateAudioPlayer success!");
+        LOGD("CreateAudioPlayer success!");
     }
     (*player)->Realize(player,SL_BOOLEAN_FALSE);
     //获取player接口
